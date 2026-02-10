@@ -33,8 +33,6 @@ def main():
         try:
             if (time.time() - last_activity) > 240:
                 mouseMove()
-                global last_activity
-                last_activity = time.time()
             time.sleep(30)
         except KeyboardInterrupt:
             sys.exit(0)
