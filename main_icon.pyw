@@ -17,22 +17,24 @@ def callbackFunction(*args):
         last_activity = time.time()
 
 mouse_listener = pynput.mouse.Listener(on_move=callbackFunction)
-keyboard_listener = pynput.keyboard.Listener(on_press=callbackFunction)        
+keyboard_listener = pynput.keyboard.Listener(on_press=callbackFunction)
 
 def trayFunction():
+    def quitFunction():
+        icon.stop()
+        sys.exit(0)
     icon = pystray.Icon(
     name = "Working hard...",
-    icon = create_icon(),
+    icon = create_icon(),Gj
     menu = pystray.Menu(
-        pystray.MenuItem("Quit", icon.stop())
+        pystray.MenuItem("Quit", quitFunction)
         )
     )
     icon.run()
 
-
 tray_thread = threading.Thread(target=trayFunction)
 tray_thread.daemon = True
-tray_thread.start
+tray_thread.start()
 
 def mouseMove():
 
@@ -54,7 +56,7 @@ def main():
     mouse_listener.start()
     while True:
         try:
-            if (time.time() - last_activity) > 240:
+            if (time.time() - last_activity) > 10:
                 mouseMove()
                 last_activity = time.time()
             time.sleep(30)
