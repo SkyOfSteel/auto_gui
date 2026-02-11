@@ -3,6 +3,7 @@ from PIL import Image, ImageDraw
 
 last_activity = time.time()
 automatedInput = False
+stop_event = threading.Event()
 
 def create_icon():
     image = Image.new('RGB', (64, 64), color=(0, 0, 0))
@@ -22,7 +23,7 @@ keyboard_listener = pynput.keyboard.Listener(on_press=callbackFunction)
 def trayFunction():
     def quitFunction(icon, menu):
         icon.stop()
-        sys.exit(0)
+        stop_event.set()
     icon = pystray.Icon(
     name = "Working hard...",
     icon = create_icon(),
@@ -54,9 +55,9 @@ def main():
     global last_activity
     keyboard_listener.start()
     mouse_listener.start()
-    while True:
+    while True and not stop_event.is_set():
         try:
-            if (time.time() - last_activity) > 5:
+            if (time.time() - last_activity) > 240:
                 mouseMove()
                 last_activity = time.time()
             time.sleep(30)
